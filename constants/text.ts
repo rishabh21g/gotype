@@ -1,0 +1,1 @@
+  export const sampleText = "tire 9652 five from an prove rope between tube log as better 5603 smell sharp 4924 end head yet! winter carry valley plan 5602 discuss 3109 your use middle differ! except choose behind 6900 best eight stay every! Form";
