@@ -1,0 +1,38 @@
+import { AccentColor, FontSize, TypingFont } from "@/constants/settings";
+
+export interface SettingsContextType {
+  accent: AccentColor;
+  setAccent: (c: AccentColor) => void;
+  font: TypingFont;
+  setFont: (f: TypingFont) => void;
+  fontCssFamily: string;
+  fontSize: FontSize;
+  setFontSize: (s: FontSize) => void;
+  showKeyboard: boolean;
+  setShowKeyboard: (v: boolean) => void;
+  soundEnabled: boolean;
+  setSoundEnabled: (v: boolean) => void;
+  clickSoundEnabled: boolean;
+  setClickSoundEnabled: (v: boolean) => void;
+  realtimeWpm: boolean;
+  setRealtimeWpm: (v: boolean) => void;
+  faahMode: boolean;
+  setFaahMode: (v: boolean) => void;
+  ghostMode: boolean;
+  setGhostMode: (v: boolean) => void;
+  shakeMode: boolean;
+  setShakeMode: (v: boolean) => void;
+  language: string;
+  setLanguage: (l: string) => void;
+  showDiacritics: boolean;
+  setShowDiacritics: (v: boolean) => void;
+  syntaxHighlighting: boolean;
+  setSyntaxHighlighting: (v: boolean) => void;
+  autoPair: boolean;
+  setAutoPair: (v: boolean) => void;
+  showLineNumbers: boolean;
+  setShowLineNumbers: (v: boolean) => void;
+  soundPackLoading: boolean;
+  setSoundPackLoading: (v: boolean) => void;
+  settingsLoaded: boolean;
+}

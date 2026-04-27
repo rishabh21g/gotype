@@ -3,6 +3,9 @@ import type { Metadata } from "next";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import GlobalClickSound from "@/hooks/use-click";
+import { SettingProvider } from "@/context/SettingContextProvider";
 
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-sans" });
 const doto = Doto({ subsets: ["latin"], variable: "--font-doto" });
@@ -23,7 +26,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "GoType" }],
   creator: "Shiva Bhattacharjee",
-  metadataBase: "https://gotype.vercel.app" ,
+  metadataBase: "https://gotype.vercel.app",
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -65,17 +68,26 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
+      
       className={cn(
         "antialiased",
         fontMono.variable,
         "font-sans",
         spaceGrotesk.variable,
-        doto.variable
+        doto.variable,
+        "dark"
+        
       )}
     >
       <body>
-        <Toaster />
-            {children}
+        <SettingProvider>
+        <GlobalClickSound/>
+        <SidebarProvider>
+          <SidebarTrigger />
+          <Toaster />
+          {children}
+        </SidebarProvider>
+        </SettingProvider>
       </body>
     </html>
   );
