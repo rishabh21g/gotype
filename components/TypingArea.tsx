@@ -4,11 +4,13 @@ import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { sampleText } from '@/constants/text';
 import { cn } from '@/lib/utils';
+import { MousePointerClick } from 'lucide-react';
 
 // Pre-split the text into an array of words
 const sampleWords = sampleText.split(' ');
 
 export default function TypingArea() {
+  const [focus, setFocus] = useState(false);
   // typedWords stores what the user actually typed for each word index
   const [typedWords, setTypedWords] = useState<string[]>([]);
   // activeWordIndex is the word the user is currently typing
@@ -18,6 +20,11 @@ export default function TypingArea() {
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
+      // If we aren't focused, bring focus back
+      if (!focus) {
+        setFocus(true);
+      }
+
       // Prevent standard browser scrolling when hitting space
       if (e.key === ' ') e.preventDefault();
 
@@ -60,7 +67,7 @@ export default function TypingArea() {
         setCurrentInput((prev) => prev + e.key);
       }
     },
-    [activeWordIndex, currentInput, typedWords]
+    [activeWordIndex, currentInput, typedWords, focus]
   );
 
   // Attach and detach event listener
@@ -70,12 +77,29 @@ export default function TypingArea() {
   }, [handleKeyDown]);
 
   return (
-    <div className="relative w-full max-w-5xl mx-auto p-4 focus:outline-none">
+    <div 
+      className="relative w-full max-w-5xl mx-auto p-4 focus:outline-none cursor-default min-h-40"
+      onClick={() => !focus && setFocus(true)}
+    >
+      {/* Unfocused Overlay */}
+      {!focus && (
+        <div className="absolute inset-0 flex items-center justify-center z-10">
+          <div className="flex items-center gap-2 text-primary font-mono text-xl tracking-wide">
+            <MousePointerClick className="w-5 h-5 -mt-0.5" />
+            <span>Click here or press any key to focus</span>
+          </div>
+        </div>
+      )}
+
+      {/* Text Area */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="text-3xl font-mono leading-relaxed tracking-wide text-left flex flex-wrap gap-x-3 gap-y-2 select-none"
+        className={cn(
+          "text-3xl font-mono leading-relaxed tracking-wide text-left flex flex-wrap gap-x-3 gap-y-2 select-none transition-all duration-300",
+          !focus && "blur-xs opacity-40"
+        )}
       >
         {sampleWords.map((word, wIdx) => {
           const isCurrentWord = wIdx === activeWordIndex;
@@ -101,8 +125,8 @@ export default function TypingArea() {
 
                 return (
                   <span key={cIdx} className="relative">
-                    {/* Render the Animated Caret */}
-                    {isCursorPosition && (
+                    {/* Render the Animated Caret only when focused */}
+                    {focus && isCursorPosition && (
                       <motion.span
                         layoutId="caret"
                         className="absolute left-0 top-1 bottom-1 w-0.5 bg-primary rounded-full"
@@ -114,7 +138,7 @@ export default function TypingArea() {
                     <span
                       className={cn(
                         "transition-colors duration-150",
-                        isCorrect && "text-primary",
+                        isCorrect && "text-foreground",
                         isIncorrect && "text-destructive",
                         isExtra && "text-destructive opacity-75", // Extra typed characters
                         isUntyped && "text-muted-foreground opacity-50"
@@ -128,7 +152,7 @@ export default function TypingArea() {
               })}
 
               {/* Cursor at the very end of the word if we've typed past its length */}
-              {isCurrentWord && typedWord.length >= word.length && (
+              {focus && isCurrentWord && typedWord.length >= word.length && (
                 <span className="relative">
                   <motion.span
                     layoutId="caret"

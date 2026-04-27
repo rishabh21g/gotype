@@ -1,5 +1,5 @@
 "use client"
-import  React from "react"
+import  React  from "react"
 import {
   Sidebar,
   SidebarContent,
@@ -8,6 +8,7 @@ import {
   SidebarGroupLabel,
   SidebarGroupContent,
   SidebarSeparator,
+  useSidebar,
 } from "@/components/ui/sidebar"
 import { Switch } from "@/components/ui/switch"
 import { Button } from "@/components/ui/button"
@@ -35,13 +36,18 @@ export function SettingsSidebar() {
     soundPackLoading, setSoundPackLoading,
     settingsLoaded,
   } = useSettings();
+  const {setOpen} = useSidebar();
 
   return (
-    <Sidebar side="right" className="w-100 border-l">
+    <Sidebar 
+      side="right" 
+      variant="sidebar" 
+      className="w-90 border-l bg-background" 
+    >
       {/* HEADER */}
       <SidebarHeader className="flex flex-row items-center justify-between p-4 border-b">
         <h2 className="text-sm font-semibold tracking-wider text-muted-foreground uppercase">Settings</h2>
-        <Button variant="ghost" size="icon" className="h-6 w-6">
+        <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => setOpen(false)}>
           <X className="h-4 w-4" />
         </Button>
       </SidebarHeader>

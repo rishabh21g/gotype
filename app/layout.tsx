@@ -3,9 +3,10 @@ import type { Metadata } from "next";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import GlobalClickSound from "@/hooks/use-click";
 import { SettingProvider } from "@/context/SettingContextProvider";
+import { SettingsSidebar } from "@/components/Settings";
 
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-sans" });
 const doto = Doto({ subsets: ["latin"], variable: "--font-doto" });
@@ -83,8 +84,8 @@ export default function RootLayout({
         <SettingProvider>
         <GlobalClickSound/>
         <SidebarProvider>
-          <SidebarTrigger />
           <Toaster />
+           {/* <SettingsSidebar/> */}
           {children}
         </SidebarProvider>
         </SettingProvider>
