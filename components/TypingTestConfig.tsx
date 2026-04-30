@@ -1,5 +1,4 @@
 "use client"
-import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import { Separator } from '@/components/ui/separator'
@@ -26,9 +25,6 @@ import CustomWordsDialog from './ui/CustomDialog'
 import CustomTimeDialog from './ui/CustomDialog'
 import Pill from './ui/Pill'
 import { useConfig } from '@/context/ConfigContext'
-
-
-// ─── Main Component ───────────────────────────────────────────────────────────
 
 const TypingTestConfig = () => {
 const {
