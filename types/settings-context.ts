@@ -22,6 +22,9 @@ export interface SettingsContextType {
   setGhostMode: (v: boolean) => void;
   shakeMode: boolean;
   setShakeMode: (v: boolean) => void;
+  shakeActive: boolean;
+  setShakeActive: (v: boolean) => void;
+  triggerShake:() => void;
   language: string;
   setLanguage: (l: string) => void;
   showDiacritics: boolean;

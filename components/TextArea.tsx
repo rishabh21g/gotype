@@ -23,7 +23,7 @@ export default function TextArea() {
     toughness,           // "easy" | "hard"
   } = useConfig();
 
-  const { realtimeWpm, shakeMode, ghostMode, fontSize, fontCssFamily } = useSettings();
+  const { realtimeWpm, shakeMode, ghostMode, fontSize, fontCssFamily , triggerShake } = useSettings();
 
   // ── Derive word list whenever config changes ─────────────────────────────
   const wordList = useMemo(
@@ -202,9 +202,8 @@ export default function TextArea() {
       if (e.key.length === 1) {
         // Shake on wrong char in hard mode
         const expected = wordList[activeWordIndex]?.[currentInput.length];
-        if (shakeMode && toughness === "hard" && expected && e.key !== expected) {
-          setShake(true);
-          setTimeout(() => setShake(false), 400);
+        if (shakeMode && expected && e.key !== expected) {
+          triggerShake();
         }
         setCurrentInput((p) => p + e.key);
       }

@@ -2,6 +2,7 @@
 import { AccentColor, FONT_OPTIONS, FontSize, TypingFont } from "@/constants/settings";
 import { ReactNode, useState } from "react";
 import { SettingContext } from "./SettingContext";
+import { tr } from "framer-motion/client";
 
 
 function loadGoogleFont(family: string) {
@@ -24,7 +25,7 @@ function applyFontToDom(fontId: TypingFont) {
   if (option.googleFamily) loadGoogleFont(option.googleFamily);
   document.documentElement.style.setProperty("--typing-font", option.cssFamily);
 }
-export const SettingProvider =({children}: {children: ReactNode})=>{
+export const SettingProvider = ({ children }: { children: ReactNode }) => {
   const [accent, setAccentState] = useState<AccentColor>("teal");
   const [font, setFontState] = useState<TypingFont>("geist-mono");
   const [showKeyboard, setShowKeyboardState] = useState(true);
@@ -33,7 +34,8 @@ export const SettingProvider =({children}: {children: ReactNode})=>{
   const [realtimeWpm, setRealtimeWpmState] = useState(false);
   const [faahMode, setFaahModeState] = useState(false);
   const [ghostMode, setGhostModeState] = useState(false);
-  const [shakeMode, setShakeModeState] = useState(false);
+  const [shakeMode, setShakeModeState] = useState(true);
+  const [shakeActive, setShakeActive] = useState(false);
   const [language, setLanguageState] = useState("english");
   const [showDiacritics, setShowDiacriticsState] = useState(true);
   const [fontSize, setFontSizeState] = useState<FontSize>("md");
@@ -91,7 +93,10 @@ export const SettingProvider =({children}: {children: ReactNode})=>{
     setShakeModeState(v);
     localStorage.setItem("tc-shake-mode", String(v));
   };
-
+  const triggerShake = () => {
+    setShakeActive(true);
+    setTimeout(() => setShakeActive(false), 500); 
+  };
 
   const setLanguage = (l: string) => {
     setLanguageState(l);
@@ -139,6 +144,7 @@ export const SettingProvider =({children}: {children: ReactNode})=>{
         faahMode, setFaahMode,
         ghostMode, setGhostMode,
         shakeMode, setShakeMode,
+        shakeActive, setShakeActive,
         language, setLanguage,
         showDiacritics, setShowDiacritics,
         syntaxHighlighting, setSyntaxHighlighting,
@@ -147,6 +153,7 @@ export const SettingProvider =({children}: {children: ReactNode})=>{
         soundPackLoading, setSoundPackLoading,
         settingsLoaded,
         isPanelOpen, setIsPanelOpen,
+        triggerShake,
       }}
     >
       {children}
