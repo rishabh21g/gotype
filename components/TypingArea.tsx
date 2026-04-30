@@ -78,7 +78,7 @@ export default function TypingArea() {
 
   return (
     <div 
-      className="relative w-full max-w-5xl mx-auto p-4 focus:outline-none cursor-default min-h-40"
+      className="relative w-full max-w-5xl mx-auto p-4 mb-8 focus:outline-none cursor-default min-h-40"
       onClick={() => !focus && setFocus(true)}
     >
       {/* Unfocused Overlay */}

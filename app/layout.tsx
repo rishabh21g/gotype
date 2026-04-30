@@ -1,4 +1,4 @@
-import { Doto, Geist_Mono, Space_Grotesk } from "next/font/google";
+import { Doto, Geist_Mono, Space_Grotesk, Public_Sans } from "next/font/google";
 import type { Metadata } from "next";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
@@ -6,9 +6,9 @@ import { cn } from "@/lib/utils";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import GlobalClickSound from "@/hooks/use-click";
 import { SettingProvider } from "@/context/SettingContextProvider";
-import { SettingsSidebar } from "@/components/Settings";
+import { ConfigProvider } from "@/context/ConfigContextProvider";
 
-const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-sans" });
+const publicSans = Public_Sans({subsets:['latin'],variable:'--font-sans'});
 const doto = Doto({ subsets: ["latin"], variable: "--font-doto" });
 const fontMono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
@@ -74,7 +74,7 @@ export default function RootLayout({
         "antialiased",
         fontMono.variable,
         "font-sans",
-        spaceGrotesk.variable,
+        publicSans.variable,
         doto.variable,
         "dark"
         
@@ -82,12 +82,13 @@ export default function RootLayout({
     >
       <body>
         <SettingProvider>
+          <ConfigProvider>
         <GlobalClickSound/>
         <SidebarProvider>
           <Toaster />
-           {/* <SettingsSidebar/> */}
           {children}
         </SidebarProvider>
+        </ConfigProvider>
         </SettingProvider>
       </body>
     </html>

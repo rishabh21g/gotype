@@ -1,1 +1,1 @@
-  export const sampleText = "tire 9652 five from an prove rope between tube log as better 5603 smell sharp 4924 end head yet! winter carry valley plan 5602 discuss 3109 your use middle differ! except choose behind 6900 best eight stay every! Form";
+  export const sampleText = "Piece words make it possible to talk about a single unit or units of something which is seen as uncountable. Piece words include words such as piece, bit, item, article. We normally use them with of. We can use them in the singular or the plural"

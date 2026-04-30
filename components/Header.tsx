@@ -5,10 +5,11 @@ import { motion } from "framer-motion"
 import { Settings } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useSidebar } from "@/components/ui/sidebar"
+import { useSettings } from "@/context/SettingContext"
 
 export default function Header() {
   // Use Shadcn's sidebar hook to control the opened/closed state
-  const { toggleSidebar } = useSidebar()
+  const {isPanelOpen , setIsPanelOpen} = useSettings();
 
   return (
     <motion.header 
@@ -37,7 +38,7 @@ export default function Header() {
         <Button 
           variant="ghost" 
           size="icon" 
-          onClick={toggleSidebar} 
+          onClick={() => setIsPanelOpen(true)} 
           className="text-muted-foreground hover:text-primary hover:bg-muted/50 transition-colors"
         >
           <Settings className="h-6 w-6" />

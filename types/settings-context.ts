@@ -35,4 +35,6 @@ export interface SettingsContextType {
   soundPackLoading: boolean;
   setSoundPackLoading: (v: boolean) => void;
   settingsLoaded: boolean;
+  isPanelOpen: boolean;
+  setIsPanelOpen: (v: boolean) => void;
 }

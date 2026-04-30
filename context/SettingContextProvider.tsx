@@ -42,6 +42,7 @@ export const SettingProvider =({children}: {children: ReactNode})=>{
   const [showLineNumbers, setShowLineNumbersState] = useState(true);
   const [soundPackLoading, setSoundPackLoading] = useState(false);
   const [settingsLoaded, setSettingsLoaded] = useState(false);
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
 
 
   const setAccent = (c: AccentColor) => {
@@ -145,6 +146,7 @@ export const SettingProvider =({children}: {children: ReactNode})=>{
         showLineNumbers, setShowLineNumbers,
         soundPackLoading, setSoundPackLoading,
         settingsLoaded,
+        isPanelOpen, setIsPanelOpen,
       }}
     >
       {children}

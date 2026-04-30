@@ -1,128 +1,274 @@
 "use client"
 import React, { useState } from 'react'
-import { Button } from './ui/button'
-import { AtSign, Hash, Wrench } from 'lucide-react'
-import { Separator } from './ui/separator'
-import { CONFIG } from '@/constants/config'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils'
+import { Separator } from '@/components/ui/separator'
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+} from '@/components/ui/dropdown-menu'
+import {
+  AtSign,
+  Hash,
+  Code2,
+  ChevronDown,
+  Flame,
+  Feather,
+  SlidersHorizontal,
+} from 'lucide-react'
+import { CODE_LANGUAGES, MODES, QUOTE_OPTIONS, TIME_OPTIONS, WORDS_OPTIONS } from '@/constants/config'
+import CustomWordsDialog from './ui/CustomDialog'
+import CustomTimeDialog from './ui/CustomDialog'
+import Pill from './ui/Pill'
+import { useConfig } from '@/context/ConfigContext'
+
+
+// ─── Main Component ───────────────────────────────────────────────────────────
 
 const TypingTestConfig = () => {
-    const [activeMode, setActiveMode] = useState('time');
-    const [activeDuration, setActiveDuration] = useState('60');
-    
-    // Toggles
-    const [punctuation, setPunctuation] = useState<boolean>(false);
-    const [numbers, setNumbers] = useState<boolean>(false);
-    const [toughness, setToughness] = useState<"easy" | "hard">("easy");
-    
-    // Other settings (preserved from your state)
-    const [time, setTime] = useState<"15"| "30"| "60"| "120">("60");
-    const [words, setWords] = useState<number>(100);
-    const [quote, setQuote] = useState<"short"| "medium"| "long">("medium");
+const {
+            activeMode, setActiveMode,
+            punctuation, setPunctuation,
+            numbers, setNumbers,
+            toughness, setToughness,
+            time, setTime,
+            customTimeOpen, setCustomTimeOpen,
+            words, setWords,
+            customWordsOpen, setCustomWordsOpen,
+            quote, setQuote,
+            language, setLanguage,
+        } = useConfig()
 
-    return (
-        <div className="flex flex-wrap items-center justify-center bg-muted/40 rounded-xl p-1.5 gap-2 text-sm font-medium my-12 mx-auto w-fit border border-border/50 shadow-sm">
-            
-            {/* Modifiers */}
-            <div className="flex items-center gap-1">
-                <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    onClick={(prev) => setPunctuation(!prev)}
-                    className={cn("h-8 gap-2 transition-colors", punctuation ? 'text-primary' : 'text-muted-foreground hover:text-foreground')}
-                >
-                    <AtSign className="w-4 h-4" /> punctuation
-                </Button>
-                <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    onClick={(prev) => setNumbers(!prev)}
-                    className={cn("h-8 gap-2 transition-colors", numbers ? 'text-primary' : 'text-muted-foreground hover:text-foreground')}
-                >
-                    <Hash className="w-4 h-4" /> numbers
-                </Button>
-            </div>
+  // Active sub-options by mode
+  const renderSubOptions = () => {
+    switch (activeMode) {
+      case 'time':
+        return (
+          <motion.div
+            key="time-opts"
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.18 }}
+            className="flex items-center gap-1"
+          >
+            {TIME_OPTIONS.map((t) => (
+              <Pill key={t} active={time === t} layoutId="active-time" onClick={() => setTime(t)}>
+                {t}s
+              </Pill>
+            ))}
+            <Pill
+              active={!TIME_OPTIONS.includes(time)}
+              layoutId="active-time"
+              onClick={() => setCustomTimeOpen(true)}
+            >
+              {!TIME_OPTIONS.includes(time) ? `${time}s` : 'custom'}
+            </Pill>
+          </motion.div>
+        )
 
-            <Separator orientation="vertical" className="h-6 mx-1 bg-border" />
+      case 'words':
+        return (
+          <motion.div
+            key="words-opts"
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.18 }}
+            className="flex items-center gap-1"
+          >
+            {WORDS_OPTIONS.map((w) => (
+              <Pill key={w} active={words === w} layoutId="active-words" onClick={() => setWords(w)}>
+                {w}
+              </Pill>
+            ))}
+            <Pill
+              active={!WORDS_OPTIONS.includes(words)}
+              layoutId="active-words"
+              onClick={() => setCustomWordsOpen(true)}
+            >
+              {!WORDS_OPTIONS.includes(words) ? words : 'custom'}
+            </Pill>
+          </motion.div>
+        )
 
-            {/* Difficulty */}
-            <div className="flex items-center gap-1 relative">
-                {['easy', 'hard'].map((level) => (
-                    <Button 
-                        key={level}
-                        variant="ghost" 
-                        size="sm" 
-                        onClick={() => setToughness(level as "easy" | "hard")}
-                        className={cn("h-8 relative z-10 transition-colors", toughness === level ? 'text-primary' : 'text-muted-foreground hover:text-foreground')}
-                    >
-                        {toughness === level && (
-                            <motion.div
-                                layoutId="active-toughness"
-                                className="absolute inset-0 bg-background rounded-md shadow-sm border border-border/50 -z-10"
-                                transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                            />
-                        )}
-                        {level}
-                    </Button>
+      case 'quote':
+        return (
+          <motion.div
+            key="quote-opts"
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.18 }}
+            className="flex items-center gap-1"
+          >
+            {QUOTE_OPTIONS.map((q) => (
+              <Pill key={q} active={quote === q} layoutId="active-quote" onClick={() => setQuote(q)}>
+                {q}
+              </Pill>
+            ))}
+          </motion.div>
+        )
+
+      case 'code':
+        return (
+          <motion.div
+            key="code-opts"
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.18 }}
+            className="flex items-center"
+          >
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="flex items-center gap-1.5 h-8 px-3 text-xs font-semibold rounded-lg border border-border/50 bg-background text-foreground/80 hover:text-foreground hover:bg-muted/30 transition-colors shadow-sm">
+                  <Code2 className="w-3.5 h-3.5 text-primary" />
+                  {language}
+                  <ChevronDown className="w-3 h-3 text-muted-foreground" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                align="start"
+                className="w-44 rounded-xl border-border/60 bg-background shadow-xl p-1"
+              >
+                <DropdownMenuLabel className="text-[10px] uppercase tracking-widest text-muted-foreground px-2 py-1">
+                  Language
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator className="bg-border/40" />
+                {CODE_LANGUAGES.map((lang) => (
+                  <DropdownMenuItem
+                    key={lang}
+                    onClick={() => setLanguage(lang)}
+                    className={cn(
+                      'text-xs rounded-lg cursor-pointer transition-colors',
+                      language === lang
+                        ? 'text-primary font-semibold bg-primary/8'
+                        : 'text-muted-foreground hover:text-foreground',
+                    )}
+                  >
+                    {language === lang && (
+                      <span className="w-1.5 h-1.5 rounded-full bg-primary mr-2 inline-block" />
+                    )}
+                    {lang}
+                  </DropdownMenuItem>
                 ))}
-            </div>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </motion.div>
+        )
 
-            <Separator orientation="vertical" className="h-6 mx-1 bg-border" />
+      default:
+        return null
+    }
+  }
 
-            {/* Modes */}
-            <div className="flex items-center gap-1 relative">
-                {CONFIG.map((mode) => (
-                    <Button
-                        key={mode.id}
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setActiveMode(mode.id)}
-                        className={cn("h-8 gap-2 relative z-10 transition-colors", activeMode === mode.id ? 'text-primary' : 'text-muted-foreground hover:text-foreground')}
-                    >
-                        {activeMode === mode.id && (
-                            <motion.div
-                                layoutId="active-mode"
-                                className="absolute inset-0 bg-background rounded-md shadow-sm border border-border/50 -z-10"
-                                transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                            />
-                        )}
-                        <mode.icon className="w-4 h-4" /> {mode.label}
-                    </Button>
-                ))}
-            </div>
+  return (
+    <>
+      <div className="flex flex-wrap items-center justify-center gap-2 mx-auto w-fit">
+        {/* Main pill container */}
+        <div className="flex items-center gap-1 bg-muted/30 border border-border/50 rounded-xl p-1.5 shadow-sm backdrop-blur-sm">
 
-            <Separator orientation="vertical" className="h-6 mx-1 bg-border" />
+          {/* ── Modifiers ─────────────────────────────────── */}
+          <div className="flex items-center gap-0.5">
+            <button
+              onClick={() => setPunctuation((p) => !p)}
+              className={cn(
+                'flex items-center gap-1.5 h-8 px-3 text-xs font-semibold rounded-lg transition-colors duration-150',
+                punctuation
+                  ? 'text-primary bg-background border border-border/50 shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-background/50',
+              )}
+            >
+              <AtSign className="w-3.5 h-3.5" /> punctuation
+            </button>
 
-            {/* Duration / Amounts */}
-            <div className="flex items-center gap-1 relative">
-                {['15', '30', '60', '120'].map((duration) => (
-                    <Button
-                        key={duration}
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setActiveDuration(duration)}
-                        className={cn("h-8 relative z-10 transition-colors", activeDuration === duration ? 'text-primary' : 'text-muted-foreground hover:text-foreground')}
-                    >
-                        {activeDuration === duration && (
-                            <motion.div
-                                layoutId="active-duration"
-                                className="absolute inset-0 bg-primary/20 rounded-md shadow-sm border border-border/50 -z-10"
-                                transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                            />
-                        )}
-                        {duration}
-                    </Button>
-                ))}
-                
-                <Separator orientation="vertical" className="h-4 mx-1 bg-border" />
-                
-                <Button variant="ghost" size="sm" className="h-8 text-muted-foreground hover:text-foreground">
-                    <Wrench className="w-4 h-4" />
-                </Button>
-            </div>
+            <button
+              onClick={() => setNumbers((n) => !n)}
+              className={cn(
+                'flex items-center gap-1.5 h-8 px-3 text-xs font-semibold rounded-lg transition-colors duration-150',
+                numbers
+                  ? 'text-primary bg-background border border-border/50 shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-background/50',
+              )}
+            >
+              <Hash className="w-3.5 h-3.5" /> numbers
+            </button>
+          </div>
+
+          <Separator orientation="vertical" className="h-5 mx-1 bg-border/50" />
+
+          {/* ── Difficulty ─────────────────────────────────── */}
+          <div className="flex items-center gap-0.5">
+            {([
+              { id: 'easy', icon: Feather, label: 'easy' },
+              { id: 'hard', icon: Flame,   label: 'hard' },
+            ] as const).map(({ id, icon: Icon, label }) => (
+              <Pill
+                key={id}
+                active={toughness === id}
+                layoutId="active-toughness"
+                onClick={() => setToughness(id)}
+                className="flex items-center gap-1.5"
+              >
+                <Icon className="w-3 h-3" /> {label}
+              </Pill>
+            ))}
+          </div>
+
+          <Separator orientation="vertical" className="h-5 mx-1 bg-border/50" />
+
+          {/* ── Modes ─────────────────────────────────────── */}
+          <div className="flex items-center gap-0.5">
+            {MODES.map(({ id, label, icon: Icon }) => (
+              <Pill
+                key={id}
+                active={activeMode === id}
+                layoutId="active-mode"
+                onClick={() => setActiveMode(id)}
+                className="flex items-center gap-1.5"
+              >
+                <Icon className="w-3.5 h-3.5" /> {label}
+              </Pill>
+            ))}
+          </div>
+
+          <Separator orientation="vertical" className="h-5 mx-1 bg-border/50" />
+
+          {/* ── Sub-options (animated swap) ────────────────── */}
+          <div className="flex items-center min-w-0">
+            <AnimatePresence mode="wait">
+              {renderSubOptions()}
+            </AnimatePresence>
+          </div>
+
+          <Separator orientation="vertical" className="h-5 mx-1 bg-border/50" />
+
+          {/* ── Settings trigger ───────────────────────────── */}
+          <button className="flex items-center justify-center w-8 h-8 rounded-lg text-muted-foreground hover:text-foreground hover:bg-background/60 transition-colors">
+            <SlidersHorizontal className="w-3.5 h-3.5" />
+          </button>
         </div>
-    )
+      </div>
+
+      {/* ── Dialogs ─────────────────────────────────────────── */}
+      <CustomTimeDialog
+        open={customTimeOpen}
+        onOpenChange={setCustomTimeOpen}
+        onConfirm={(val) => setTime(val)}
+      />
+      <CustomWordsDialog
+        open={customWordsOpen}
+        onOpenChange={setCustomWordsOpen}
+        onConfirm={(val) => setWords(val)}
+      />
+    </>
+  )
 }
 
 export default TypingTestConfig

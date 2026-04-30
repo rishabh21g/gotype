@@ -1,12 +1,19 @@
+"use client"
+import React, { useState } from 'react'
+import Header from '@/components/Header'
+import { SettingsPanel } from '@/components/SettingsPanel'
 import KeyboardComponent from '@/components/Keyboard'
 import TypingTestConfig from '@/components/TypingTestConfig'
-import React from 'react'
 import TypingArea from '@/components/TypingArea'
-import Header from '@/components/Header'
+import { Button } from '@/components/ui/button'
+
 const page = () => {
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
   return (
-    <main className='flex flex-col gap-2 w-screen min-h-screen py-6'>
-      <Header/>
+    <main className='flex flex-col gap-2 w-full relative'>
+      <Header />
+      <SettingsPanel />      
       <TypingTestConfig/>
       <TypingArea />
       <KeyboardComponent />
