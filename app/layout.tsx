@@ -7,6 +7,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import GlobalClickSound from "@/hooks/use-click";
 import { SettingProvider } from "@/context/SettingContextProvider";
 import { ConfigProvider } from "@/context/ConfigContextProvider";
+import ThemeProvider from "@/context/ThemeContextProvider";
 
 const publicSans = Public_Sans({subsets:['latin'],variable:'--font-sans'});
 const doto = Doto({ subsets: ["latin"], variable: "--font-doto" });
@@ -81,8 +82,9 @@ export default function RootLayout({
       )}
     >
       <body>
+        <ThemeProvider>
         <SettingProvider>
-          <ConfigProvider>
+        <ConfigProvider>
         <GlobalClickSound/>
         <SidebarProvider>
           <Toaster />
@@ -90,6 +92,7 @@ export default function RootLayout({
         </SidebarProvider>
         </ConfigProvider>
         </SettingProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

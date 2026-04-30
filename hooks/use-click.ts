@@ -1,16 +1,20 @@
-"use client"
-import { useEffect } from 'react';
+"use client";
+import { useEffect, useRef } from 'react';
 
-const ClickSound = new Audio('/sounds/mouse-click.mp3');
-export default function GlobalClickSound() {
+export default function useGlobalClickSound() {
+    const audioRef = useRef<HTMLAudioElement | null>(null);
+
     useEffect(() => {
+        audioRef.current = new Audio("/sounds/mouse-click.mp3");
         const handleClick = () => {
-            ClickSound.currentTime = 0
-            ClickSound.play()
-        }
-
-        window.addEventListener("pointerdown", handleClick)
-        return () => window.removeEventListener("pointerdown", handleClick)
-    }, [])
+            if (audioRef.current) {
+                audioRef.current.currentTime = 0;
+                audioRef.current.volume = 0.5;
+                audioRef.current.play();
+            }
+        };
+        window.addEventListener("pointerdown", handleClick);
+        return () => window.removeEventListener("pointerdown", handleClick);
+    }, []);
     return null
-} 
+}

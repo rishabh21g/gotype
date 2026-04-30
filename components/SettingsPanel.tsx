@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { ChevronDown, Monitor, Moon, Sun, X, Volume2, Keyboard, LayoutDashboard, Code2, Zap, Type } from "lucide-react"
 import { useSettings } from "@/context/SettingContext"
 import { FONT_SIZES } from "@/constants/settings"
+import { useTheme } from "@/context/ThemeContex"
 
 // ─── Section Wrapper ──────────────────────────────────────────────────────────
 function Section({
@@ -85,6 +86,7 @@ export function SettingsPanel() {
     isPanelOpen, setIsPanelOpen,
   } = useSettings()
 
+  const {theme , settheme} = useTheme()
   return (
     <AnimatePresence>
       {isPanelOpen && (
@@ -131,20 +133,20 @@ export function SettingsPanel() {
               <Section icon={Monitor} title="Theme" description="Appearance preference">
                 <div className="flex items-center gap-1.5 p-1 rounded-xl border border-border/60 bg-muted/30 w-fit">
                   {[
-                    { icon: Monitor, label: "System" },
-                    { icon: Sun, label: "Light" },
-                    { icon: Moon, label: "Dark" },
-                  ].map(({ icon: Icon, label }, i) => (
+                    { icon: Monitor, label: "System", value: "system" },
+                    { icon: Sun, label: "Light", value: "light" },
+                    { icon: Moon, label: "Dark", value: "dark" },
+                  ].map(({ icon: Icon, label, value }) => (
                     <button
                       key={label}
+                      onClick={() => settheme(value as "light" | "dark" | "system")}
                       className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-150 ${
-                        i === 0
+                        theme === value
                           ? "bg-background text-foreground shadow-sm border border-border/40"
                           : "text-muted-foreground hover:text-foreground hover:bg-background/50"
                       }`}
                     >
                       <Icon className="w-3 h-3" />
-                      {label}
                     </button>
                   ))}
                 </div>
