@@ -168,7 +168,7 @@ const {
     <>
       <div className="flex flex-wrap items-center justify-center gap-2 mx-auto w-fit">
         {/* Main pill container */}
-        <div className="flex items-center gap-1 bg-muted/30 border border-border/50 rounded-xl p-1.5 shadow-sm backdrop-blur-sm">
+        <div className="flex items-center gap-1 bg-muted/30 border border-border/50 rounded-md p-1.5 shadow-sm backdrop-blur-sm">
 
           {/* ── Modifiers ─────────────────────────────────── */}
           <div className="flex items-center gap-0.5">

@@ -16,21 +16,21 @@ export function FinishedOverlay({
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.96 }}
       transition={{ type: "spring", damping: 22, stiffness: 260 }}
-      className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-6"
+      className="absolute inset-0 z-150 flex flex-col items-center justify-center gap-6 w-full h-full"
     >
-      <div className="flex items-center gap-2 text-primary">
+      <div className="flex items-center gap-2 text-primary justify-center">
         <CheckCircle2 className="w-5 h-5" />
         <span className="text-sm font-semibold tracking-widest uppercase">Test complete</span>
       </div>
 
       <div className="flex items-center gap-10">
         <div className="text-center">
-          <p className="text-5xl font-bold tabular-nums text-foreground">{wpm}</p>
+          <p className="text-9xl font-bold tabular-nums text-foreground">{wpm}</p>
           <p className="text-xs uppercase tracking-widest text-muted-foreground mt-1">wpm</p>
         </div>
         <div className="w-px h-12 bg-border/60" />
         <div className="text-center">
-          <p className="text-5xl font-bold tabular-nums text-foreground">{accuracy}</p>
+          <p className="text-9xl font-bold tabular-nums text-foreground">{accuracy} %</p>
           <p className="text-xs uppercase tracking-widest text-muted-foreground mt-1">accuracy</p>
         </div>
       </div>

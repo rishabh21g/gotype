@@ -107,7 +107,7 @@ export function SettingsPanel() {
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.92, opacity: 0, y: 12 }}
             transition={{ type: "spring", damping: 26, stiffness: 300 }}
-            className="relative z-10 w-105 max-h-[86vh] flex flex-col rounded-2xl border border-border/60 bg-background shadow-2xl shadow-black/20 overflow-hidden"
+            className="relative z-10 w-180 max-h-[86vh] flex flex-col rounded-md border border-border/60 bg-background shadow-2xl shadow-black/20 overflow-hidden"
           >
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-border/50 bg-muted/20">
